@@ -1,0 +1,30 @@
+{
+  "name": "local-knowledge-mcp",
+  "version": "1.0.0",
+  "description": "A local MCP server which store knowledge providing for LLM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Johnny-Guuuuu/local-knowledge-mcp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Johnny-Guuuuu/local-knowledge-mcp/issues"
+  },
+  "homepage": "https://github.com/Johnny-Guuuuu/local-knowledge-mcp#readme",
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.13.1",
+    "@types/node": "^24.0.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "zod": "^3.25.67"
+  }
+}
