@@ -24,6 +24,11 @@ const markdownTools = {
       content: z.string().describe("Markdown content")
     }
   },
+  list: {
+    title: "List Markdowns",
+    description: "List all markdown files",
+    inputSchema: {}
+  },
   read: {
     title: "Read Markdown",
     description: "Read a markdown file",
@@ -77,6 +82,15 @@ server.registerTool("markdown.delete", markdownTools.delete,
   async ({ id }) => {
     const repo = new MarkdownRepository(markdownDir);
     const result = await repo.deleteMarkdown(id);
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  }
+);
+
+// Register markdown list tool
+server.registerTool("markdown.list", markdownTools.list,
+  async () => {
+    const repo = new MarkdownRepository(markdownDir);
+    const result = await repo.listMarkdowns();
     return { content: [{ type: "text", text: JSON.stringify(result) }] };
   }
 );
