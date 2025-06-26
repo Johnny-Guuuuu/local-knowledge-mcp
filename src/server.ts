@@ -95,18 +95,6 @@ server.registerTool("markdown.list", markdownTools.list,
   }
 );
 
-// Keep existing add tool
-server.registerTool("add",
-  {
-    title: "Addition Tool",
-    description: "Add two numbers",
-    inputSchema: { a: z.number(), b: z.number() }
-  },
-  async ({ a, b }) => ({
-    content: [{ type: "text", text: String(a + b) }]
-  })
-);
-
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
 (async () => {
