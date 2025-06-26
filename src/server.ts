@@ -1,6 +1,8 @@
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { MarkdownRepository } from "./common/utils";
+import minimist from "minimist";
 
 // Create an MCP server
 const server = new McpServer({
@@ -8,7 +10,78 @@ const server = new McpServer({
   version: "1.0.0"
 });
 
-// Add an addition tool
+// Parse command line arguments
+const args = minimist(process.argv.slice(2));
+const markdownDir = args.e || "./markdown";
+
+// Markdown tools
+const markdownTools = {
+  create: {
+    title: "Create Markdown",
+    description: "Create a new markdown file",
+    inputSchema: {
+      id: z.string().describe("File ID"),
+      content: z.string().describe("Markdown content")
+    }
+  },
+  read: {
+    title: "Read Markdown",
+    description: "Read a markdown file",
+    inputSchema: {
+      id: z.string().describe("File ID")
+    }
+  },
+  update: {
+    title: "Update Markdown",
+    description: "Update a markdown file",
+    inputSchema: {
+      id: z.string().describe("File ID"),
+      content: z.string().describe("New markdown content")
+    }
+  },
+  delete: {
+    title: "Delete Markdown",
+    description: "Delete a markdown file",
+    inputSchema: {
+      id: z.string().describe("File ID")
+    }
+  }
+};
+
+// Register markdown tools
+server.registerTool("markdown.create", markdownTools.create,
+  async ({ id, content }) => {
+    const repo = new MarkdownRepository(markdownDir);
+    const result = await repo.createMarkdown(id, content);
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  }
+);
+
+server.registerTool("markdown.read", markdownTools.read,
+  async ({ id }) => {
+    const repo = new MarkdownRepository(markdownDir);
+    const result = await repo.readMarkdown(id);
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  }
+);
+
+server.registerTool("markdown.update", markdownTools.update,
+  async ({ id, content }) => {
+    const repo = new MarkdownRepository(markdownDir);
+    const result = await repo.updateMarkdown(id, content);
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  }
+);
+
+server.registerTool("markdown.delete", markdownTools.delete,
+  async ({ id }) => {
+    const repo = new MarkdownRepository(markdownDir);
+    const result = await repo.deleteMarkdown(id);
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
+  }
+);
+
+// Keep existing add tool
 server.registerTool("add",
   {
     title: "Addition Tool",
@@ -18,25 +91,6 @@ server.registerTool("add",
   async ({ a, b }) => ({
     content: [{ type: "text", text: String(a + b) }]
   })
-);
-
-// Add a dynamic greeting resource
-server.registerResource(
-  "greeting",
-  new ResourceTemplate("greeting://{name}", { list: undefined }),
-  { 
-    title: "Greeting Resource",      // Display name for UI
-    description: "Dynamic greeting generator"
-  },
-  async (uri: any, extra: any) => {
-    const name = extra.params?.name || 'stranger';
-    return {
-      contents: [{
-        uri: uri.href,
-        text: `Hello, ${name}!`
-      }]
-    };
-  }
 );
 
 // Start receiving messages on stdin and sending messages on stdout

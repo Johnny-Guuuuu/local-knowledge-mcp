@@ -20,8 +20,12 @@
     "url": "https://github.com/Johnny-Guuuuu/local-knowledge-mcp/issues"
   },
   "homepage": "https://github.com/Johnny-Guuuuu/local-knowledge-mcp#readme",
+  "dependencies": {
+    "minimist": "^1.2.8"
+  },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.13.1",
+    "@types/minimist": "^1.2.5",
     "@types/node": "^24.0.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
