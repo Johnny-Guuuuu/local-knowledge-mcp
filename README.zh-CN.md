@@ -56,7 +56,7 @@ npm run build
 
 ## 使用方式
 
-配置完成后，你可以在提示中添加 "use local-knowledge", prompt 示例:
+配置完成后，你可以在 Prompt 中添加 "use local-knowledge", Prompt 示例:
 
 ```markdown
 如何安装 local-knowledge-mcp? use local-knowledge
